@@ -1,4 +1,4 @@
-# Dockerized telegram_chain_auto_vote_bot project
+# Docker containers (Node.js, Redis, Mongo)
 
 ## Usage
 
