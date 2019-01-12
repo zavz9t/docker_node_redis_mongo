@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+    tcavb-node:
+        volumes:
+            - tcavb-unison-sync:/var/www:nocopy
+
+volumes:
+    tcavb-unison-sync:
+        external: true

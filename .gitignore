@@ -1,0 +1,7 @@
+.docker-sync/
+.env
+.idea/
+!code/.gitkeep
+code/
+nosql/data
+redis/data

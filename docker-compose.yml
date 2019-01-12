@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+    tcavb-redis:
+        build: ./redis
+        container_name: tcavb-db
+        volumes:
+            - ./redis/data:/data
+    tcavb-nosql:
+        build: ./nosql
+        container_name: tcavb-nosql
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${NOSQL_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${NOSQL_PASS}
+        volumes:
+            - ./nosql/data:/data/db
+    tcavb-node:
+        build:
+            context: ./node
+            args:
+                USER_ID: ${UID}
+                GROUP_ID: ${GID}
+        user: ${UID}:${GID}
+        container_name: tcavb-node
+        depends_on:
+            - tcavb-nosql
+            - tcavb-redis
+        environment:
+            - REPOSITORY=${CODE_REPOSITORY}
+            - REDIS_URL=tcavb-redis:6379
+            - MONGODB_URI=mongodb://${NOSQL_USER}:${NOSQL_PASS}@tcavb-nosql:27017/${NOSQL_DB}
+            - SENTRY_DSN=${SENTRY_DSN}
+            - BOT_TOKEN=${BOT_TOKEN}
+            - CHAT_ID=${CHAT_ID}
+            - NTBA_FIX_319=1
+        volumes:
+            - ${SSH_KEY}:/home/node/.ssh/id_rsa:ro
+#            - ~/.gitconfig:/home/node/.gitconfig:ro
+
+networks:
+    default:
+        external:
+            name: tcavb-network
