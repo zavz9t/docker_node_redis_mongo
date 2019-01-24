@@ -12,7 +12,8 @@ if ! [ -d app ]; then
 else
     echo "Project sources found. Updating $BRANCH branch..."
     cd app
-    git pull origin "$BRANCH"
+    # removed only for dev!!!
+#    git pull origin "$BRANCH"
 fi
 
 npm install
